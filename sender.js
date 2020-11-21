@@ -10,3 +10,6 @@ app.get('/',(req,res)=>{
 app.listen(port,()=>{
     console.log(`App Listening at localhost:${port}`);
 })
+
+
+//ngrok http 3000
