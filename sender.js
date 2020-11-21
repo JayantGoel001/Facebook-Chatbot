@@ -22,7 +22,7 @@ function respond(sender, text){
         }
     };
 
-    axios.post(url,message).then(response=>{
+    axios.post(url,message).then(()=>{
         console.log("Responded");
     })
 
