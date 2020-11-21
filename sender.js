@@ -4,11 +4,29 @@ const app = express()
 const port = 3000
 
 const local_token = "123456"
+const axios = require("axios").default;
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended:true
 }))
+
+function respond(sender, text){
+    console.log(sender,text);
+    const access_token = "EAAQRa7M0gasBACSOe0GuIPIC8iO7LHBIX9LolFUqB6gcu6igmxnBGEN2obBHxXPDGZCJqfZAj8ZBAkhtjlZBQlfkyWQhZBU37kyRsUGQT2a8iI8Li45XnsKVcCXGBrOKBZA5TT7N5utrRpIK3T8BZA8T4iLsod9uyzxad4vwlZBYywZDZD";
+    const url = `https://graph.facebook.com/v9.0/me/messages?access_token=${access_token}`;
+    const message = {
+        "recipient": sender,
+        "message": {
+            "text": `Replying to your text\n ${text}\nHii!! How do you do?`
+        }
+    };
+
+    axios.post(url,message).then(response=>{
+        console.log("Responded");
+    })
+
+}
 
 app.get('/',(req,res)=>{
     console.log(req.query);
@@ -21,7 +39,15 @@ app.get('/',(req,res)=>{
     }
 })
 app.post('/',(req,res)=>{
-    console.log(JSON.stringify(req.body));
+    // console.log(JSON.stringify(req.body));
+    const body = req.body;
+    body.entry.forEach(entry=>{
+         if (entry["messaging"]){
+             entry.messaging.forEach(messaging=>{
+                 respond(messaging.sender,messaging.message.text);
+             })
+         }
+    });
     res.send("OK You are cool!!");
 })
 
